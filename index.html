@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Owen Martin | Cybersecurity Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0a0e14;
+    --surface: #111620;
+    --surface2: #161d2a;
+    --border: #1e2a3a;
+    --accent: #00d4aa;
+    --accent2: #4a9eff;
+    --accent3: #ff6b6b;
+    --text: #e8edf4;
+    --text-muted: #6b7a90;
+    --text-dim: #3a4a5c;
+    --glow: rgba(0,212,170,0.15);
+    --glow2: rgba(74,158,255,0.12);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 3rem;
+    background: rgba(10,14,20,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  /* ── HERO ── */
+  #home {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8rem 3rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.3;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 80%);
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,212,170,0.08) 0%, transparent 70%);
+    top: -100px; left: -100px;
+    pointer-events: none;
+  }
+
+  .hero-glow2 {
+    position: absolute;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(74,158,255,0.07) 0%, transparent 70%);
+    bottom: -50px; right: 0;
+    pointer-events: none;
+  }
+
+  .hero-content { position: relative; max-width: 900px; }
+
+  .hero-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+
+  .hero-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(3rem, 8vw, 6rem);
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.35s forwards;
+  }
+
+  .hero-name span { color: var(--accent); }
+
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    font-weight: 400;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.5s forwards;
+  }
+
+  .hero-desc {
+    max-width: 580px;
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.65s forwards;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.8s forwards;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 2rem;
+    background: var(--accent);
+    color: #0a0e14;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+  }
+
+  .btn-primary:hover { background: #00f0c0; transform: translateY(-2px); }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 2rem;
+    background: transparent;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+  }
+
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+  .hero-stats {
+    display: flex;
+    gap: 3rem;
+    margin-top: 4rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--border);
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1s forwards;
+  }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent);
+  }
+
+  .stat-label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* ── SECTION BASE ── */
+  section { padding: 6rem 3rem; max-width: 1100px; margin: 0 auto; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── ABOUT ── */
+  #about { padding-top: 2rem; }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .about-text p {
+    color: var(--text-muted);
+    margin-bottom: 1.2rem;
+    font-size: 0.97rem;
+  }
+
+  .about-text p strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .about-sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+
+  .info-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
+  }
+
+  .info-card-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .info-card-value {
+    font-size: 0.92rem;
+    color: var(--text);
+  }
+
+  /* ── PROJECTS ── */
+  #projects { border-top: 1px solid var(--border); }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+    clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+  }
+
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+
+  .project-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+  .project-card:hover::before { transform: scaleX(1); }
+
+  .project-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+  }
+
+  .project-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+    color: var(--text);
+  }
+
+  .project-desc {
+    font-size: 0.87rem;
+    color: var(--text-muted);
+    margin-bottom: 1.2rem;
+    line-height: 1.65;
+  }
+
+  .project-reflection {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    font-style: italic;
+    border-left: 2px solid var(--accent);
+    padding-left: 0.8rem;
+    margin-bottom: 1.2rem;
+    line-height: 1.6;
+  }
+
+  .project-tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .tool-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    padding: 0.2rem 0.6rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+  }
+
+  .project-card.featured {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .project-card.featured .project-main { }
+  .project-card.featured .project-side { border-left: 1px solid var(--border); padding-left: 2rem; }
+
+  /* ── SKILLS ── */
+  #skills { border-top: 1px solid var(--border); }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .skill-group {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 1.8rem;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+  }
+
+  .skill-group-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--border);
+    letter-spacing: 0.02em;
+  }
+
+  .skill-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .skill-list li {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .skill-list li::before {
+    content: '›';
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    font-size: 1rem;
+    line-height: 1.3;
+    flex-shrink: 0;
+  }
+
+  .cert-strip {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .cert-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    background: var(--surface);
+    border: 1px solid var(--accent);
+    padding: 0.8rem 1.2rem;
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+  }
+
+  .cert-icon {
+    width: 28px; height: 28px;
+    background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem;
+    color: #0a0e14;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .cert-info { display: flex; flex-direction: column; }
+
+  .cert-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .cert-status {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+  }
+
+  /* ── EXPERIENCE ── */
+  #experience { border-top: 1px solid var(--border); }
+
+  .timeline { display: flex; flex-direction: column; gap: 0; position: relative; }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 110px;
+    top: 0; bottom: 0;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 2rem;
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+
+  .timeline-item:last-child { border-bottom: none; }
+
+  .timeline-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    padding-top: 0.25rem;
+    text-align: right;
+    padding-right: 1.5rem;
+    letter-spacing: 0.05em;
+  }
+
+  .timeline-dot {
+    position: absolute;
+    left: 104px;
+    top: 2.4rem;
+    width: 13px; height: 13px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--accent);
+  }
+
+  .timeline-content { padding-left: 1rem; }
+
+  .timeline-role {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.2rem;
+  }
+
+  .timeline-org {
+    font-size: 0.85rem;
+    color: var(--accent2);
+    margin-bottom: 0.8rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+  }
+
+  .timeline-points {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .timeline-points li {
+    font-size: 0.87rem;
+    color: var(--text-muted);
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+  }
+
+  .timeline-points li::before {
+    content: '—';
+    color: var(--text-dim);
+    flex-shrink: 0;
+  }
+
+  /* ── CONTACT ── */
+  #contact { border-top: 1px solid var(--border); }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .contact-intro {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+    line-height: 1.75;
+  }
+
+  .contact-links { display: flex; flex-direction: column; gap: 1rem; }
+
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    text-decoration: none;
+    color: var(--text);
+    transition: border-color 0.2s, color 0.2s;
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+  }
+
+  .contact-item:hover { border-color: var(--accent); color: var(--accent); }
+
+  .contact-item-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.15rem;
+  }
+
+  .contact-item-value { font-size: 0.92rem; }
+
+  .contact-note {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    padding: 1.8rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  .contact-note strong { color: var(--text); font-weight: 500; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { gap: 1.2rem; }
+    .nav-links a { font-size: 0.7rem; }
+    section { padding: 4rem 1.5rem; }
+    #home { padding: 7rem 1.5rem 3rem; }
+    .about-grid, .contact-grid, .skills-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .project-card.featured { grid-column: span 1; grid-template-columns: 1fr; }
+    .project-card.featured .project-side { border-left: none; border-top: 1px solid var(--border); padding-left: 0; padding-top: 1.5rem; }
+    .timeline::before { left: 80px; }
+    .timeline-item { grid-template-columns: 80px 1fr; gap: 1rem; }
+    .timeline-dot { left: 74px; }
+    .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#home">OM_</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div id="home" style="max-width:100%; padding-left: max(3rem, calc((100vw - 1100px)/2)); padding-right: 3rem;">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-content">
+    <div class="hero-tag">// Cybersecurity &amp; Investigations | Fleming College</div>
+    <h1 class="hero-name">Owen<br/><span>Martin</span></h1>
+    <p class="hero-title">Security Analyst in Training &nbsp;·&nbsp; Forensics &nbsp;·&nbsp; Threat Detection</p>
+    <p class="hero-desc">From biomedical research to the front lines of digital defence, I bring an investigator's mindset, a scientist's precision, and hands-on technical training to every security challenge.</p>
+    <div class="hero-ctas">
+      <a class="btn-primary" href="#projects">View Projects</a>
+      <a class="btn-secondary" href="#contact">Get in Touch</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">6+</div>
+        <div class="stat-label">Lab Projects</div>
+      </div>
+      <div>
+        <div class="stat-num">2</div>
+        <div class="stat-label">Degrees</div>
+      </div>
+      <div>
+        <div class="stat-num">10+</div>
+        <div class="stat-label">Yrs Work Exp.</div>
+      </div>
+      <div>
+        <div class="stat-num">Sec+</div>
+        <div class="stat-label">Cert (Summer '26)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header reveal">
+    <span class="section-num">01</span>
+    <h2 class="section-title">About Me</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>I'm a second-year student in the <strong>Computer Security &amp; Investigations (CSI)</strong> program at Fleming College in Peterborough, Ontario, working toward a three-year Advanced Diploma graduating in 2027.</p>
+      <p>My path to cybersecurity started in a lab coat. I completed an <strong>Honours BSc in Biomedical Toxicology</strong> (Minor in Neuroscience) at the University of Guelph, then spent over a decade working across environmental science, analytical chemistry, toxicological research, and operations management. Every role sharpened the same core skill: finding signal in noise.</p>
+      <p>That background maps directly onto what security work demands: <strong>methodical investigation, precise documentation, and sound judgment under pressure</strong>. I'm drawn to the detection and response side of security: understanding how systems are compromised, building detection logic, and constructing evidence-based incident timelines.</p>
+      <p>Outside of academics, I play drums and classical guitar, and I'm a former competitive rower and coach. I also enjoy exploring food scenes in Peterborough and the Niagara region.</p>
+    </div>
+    <div class="about-sidebar reveal">
+      <div class="info-card">
+        <div class="info-card-label">Program</div>
+        <div class="info-card-value">Computer Security &amp; Investigations<br/>Fleming College, Peterborough ON</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">Previous Degree</div>
+        <div class="info-card-value">Honours BSc in Biomedical Toxicology<br/>Minor: Neuroscience, University of Guelph</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">Focus Areas</div>
+        <div class="info-card-value">SIEM &amp; Threat Detection · Digital Forensics<br/>Network Security · Incident Response</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">Athletics</div>
+        <div class="info-card-value">Varsity Rowing, U of G<br/>2009 OUA Novice Coach of the Year<br/>2008 Oarsman of the Year · Henley Gold</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-header reveal">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Projects</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="projects-grid">
+
+    <!-- Featured -->
+    <div class="project-card featured reveal">
+      <div class="project-main">
+        <div class="project-tag">// Featured · Network Security</div>
+        <div class="project-title">Squid Proxy Lab: Access Control &amp; Log Monitoring</div>
+        <div class="project-desc">Built a fully functional Squid forward proxy in a VMware NAT-mode network. Configured IP whitelisting, user authentication, and access control lists (ACLs) to restrict and log outbound HTTP/HTTPS traffic. Validated behaviour with curl and browser-based tests and set up real-time log ingestion to verify access decisions against defined policy rules.</div>
+        <div class="project-tools">
+          <span class="tool-tag">Squid Proxy</span>
+          <span class="tool-tag">VMware</span>
+          <span class="tool-tag">Kali Linux</span>
+          <span class="tool-tag">Parrot Linux</span>
+          <span class="tool-tag">Bash</span>
+          <span class="tool-tag">ACL Design</span>
+        </div>
+      </div>
+      <div class="project-side">
+        <div class="info-card-label" style="font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.8rem;">Reflection</div>
+        <p class="project-reflection" style="font-style:normal;font-size:0.87rem;color:var(--text-muted);line-height:1.7;border:none;padding:0;">Working through ACL logic and troubleshooting authentication failures sharpened my understanding of proxy architecture and traffic filtering. This project demonstrated the direct link between policy configuration and observable log output, which is a skill central to detection engineering and security monitoring roles.</p>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-tag">// Forensics &amp; Infrastructure</div>
+      <div class="project-title">Parrot Linux Forensic Environment (Vagrant)</div>
+      <div class="project-desc">Designed and deployed a disposable, reproducible forensic investigation environment using Vagrant and Parrot Linux. Configured SSH key authentication, validated a forensic tool suite, and established snapshot workflows for repeatable lab setups.</div>
+      <div class="project-reflection">"Infrastructure-as-code principles applied to forensic work, where the environment's integrity is as important as the investigation itself."</div>
+      <div class="project-tools">
+        <span class="tool-tag">Vagrant</span>
+        <span class="tool-tag">Parrot Linux</span>
+        <span class="tool-tag">SSH</span>
+        <span class="tool-tag">VMware</span>
+        <span class="tool-tag">Bash</span>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-tag">// Scripting &amp; Detection</div>
+      <div class="project-title">Wireless IDS/IPS Script (Scapy)</div>
+      <div class="project-desc">Developed a Python-based wireless intrusion detection script using Scapy. Detected beacon floods, evil twin APs, rogue access points, and deauthentication burst attacks, logging events and triggering configurable response actions.</div>
+      <div class="project-reflection">"Working through real attack signatures at the packet level gave me a much more concrete model of how wireless threats manifest and how defenders can respond programmatically."</div>
+      <div class="project-tools">
+        <span class="tool-tag">Python</span>
+        <span class="tool-tag">Scapy</span>
+        <span class="tool-tag">Kali Linux</span>
+        <span class="tool-tag">802.11</span>
+        <span class="tool-tag">Wireless Security</span>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-tag">// CTF &amp; Competition</div>
+      <div class="project-title">TacOps 2026: CTF Competition</div>
+      <div class="project-desc">Competed in TacOps 2026 at Ontario Tech University as part of a four-person team. Contributed to Linux-based and networking challenges applying enumeration, privilege escalation, and traffic analysis in a timed competitive environment.</div>
+      <div class="project-reflection">"My first CTF highlighted both my strengths and my growth areas, reinforcing that team communication is as critical as technical skill under pressure."</div>
+      <div class="project-tools">
+        <span class="tool-tag">Linux</span>
+        <span class="tool-tag">Networking</span>
+        <span class="tool-tag">Enumeration</span>
+        <span class="tool-tag">Team Collab</span>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-tag">// Cryptography</div>
+      <div class="project-title">AES-GCM Encryption Lab</div>
+      <div class="project-desc">Implemented AES-GCM symmetric encryption and decryption in a Jupyter Notebook, exploring authenticated encryption, key management, and IV reuse vulnerabilities. Validated outputs and documented the full cryptographic workflow.</div>
+      <div class="project-reflection">"Understanding why authenticated encryption modes exist and what breaks when misused. That understanding built the intuition that's valuable in both security review and incident analysis."</div>
+      <div class="project-tools">
+        <span class="tool-tag">Python</span>
+        <span class="tool-tag">Jupyter</span>
+        <span class="tool-tag">PyCryptodome</span>
+        <span class="tool-tag">AES-GCM</span>
+        <span class="tool-tag">Cryptography</span>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-tag">// SIEM &amp; Log Management</div>
+      <div class="project-title">Graylog SIEM Lab: Log Ingestion &amp; Alerting</div>
+      <div class="project-desc">Deployed and configured a Graylog instance to ingest, parse, and search log data from multiple sources. Built structured streams, configured extractors to normalize raw log fields, and set up alert conditions to flag suspicious activity. Tested end-to-end detection workflows by generating events and verifying they triggered the correct alerts.</div>
+      <div class="project-reflection">"Seeing how raw, messy log data gets transformed into searchable, structured events made detection logic feel concrete rather than abstract. This lab gave me a practical understanding of what analysts are actually working with inside a SOC."</div>
+      <div class="project-tools">
+        <span class="tool-tag">Graylog</span>
+        <span class="tool-tag">SIEM</span>
+        <span class="tool-tag">Log Ingestion</span>
+        <span class="tool-tag">Syslog</span>
+        <span class="tool-tag">Alerting</span>
+        <span class="tool-tag">Linux</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-header reveal">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Skills &amp; Certifications</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="skills-grid reveal">
+    <div class="skill-group">
+      <div class="skill-group-title">Operating Systems</div>
+      <ul class="skill-list">
+        <li>Kali Linux &amp; Parrot Linux</li>
+        <li>Ubuntu / Debian</li>
+        <li>Windows Server</li>
+        <li>macOS</li>
+      </ul>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Networking &amp; Security</div>
+      <ul class="skill-list">
+        <li>TCP/IP, DNS, DHCP, NAT</li>
+        <li>Proxy configuration (Squid)</li>
+        <li>Packet capture (Wireshark, tcpdump)</li>
+        <li>Nmap, Metasploit (foundational)</li>
+        <li>Snort (introductory)</li>
+      </ul>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Scripting &amp; Automation</div>
+      <ul class="skill-list">
+        <li>Bash</li>
+        <li>Python (Scapy, pandas, PyCryptodome)</li>
+        <li>PowerShell</li>
+        <li>Git (basic)</li>
+      </ul>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Forensics &amp; Detection</div>
+      <ul class="skill-list">
+        <li>Parrot Linux forensic toolkit</li>
+        <li>Graylog SIEM (log ingestion, streams, alerting)</li>
+        <li>Log analysis &amp; normalization</li>
+        <li>SIEM triage workflows</li>
+        <li>Regex-based detection logic</li>
+        <li>Chain-of-custody documentation</li>
+      </ul>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Virtualization &amp; Cloud</div>
+      <ul class="skill-list">
+        <li>VMware Workstation Pro</li>
+        <li>VirtualBox / Vagrant</li>
+        <li>AWS &amp; Azure (foundational logging)</li>
+        <li>IAM concepts</li>
+        <li>Docker (foundational)</li>
+      </ul>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Professional Skills</div>
+      <ul class="skill-list">
+        <li>Technical report writing</li>
+        <li>Analytical &amp; laboratory methodology</li>
+        <li>Team leadership &amp; coordination</li>
+        <li>Stakeholder communication</li>
+        <li>Data analysis &amp; documentation</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="cert-strip reveal">
+    <div class="cert-badge">
+      <div class="cert-icon">Sec+</div>
+      <div class="cert-info">
+        <div class="cert-name">CompTIA Security+</div>
+        <div class="cert-status">// Scheduled: Summer 2026</div>
+      </div>
+    </div>
+    <div class="cert-badge" style="border-color:var(--accent2);">
+      <div class="cert-icon" style="background:var(--accent2);">CSI</div>
+      <div class="cert-info">
+        <div class="cert-name">Advanced Diploma, CSI</div>
+        <div class="cert-status" style="color:var(--accent2);">// Fleming College · 2027</div>
+      </div>
+    </div>
+    <div class="cert-badge" style="border-color:var(--text-dim);">
+      <div class="cert-icon" style="background:var(--text-dim);">BSc</div>
+      <div class="cert-info">
+        <div class="cert-name">Honours BSc, Biomedical Toxicology</div>
+        <div class="cert-status" style="color:var(--text-dim);">// University of Guelph · 2012</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-header reveal">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Work Experience</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="timeline">
+
+    <div class="timeline-item reveal">
+      <div class="timeline-date">2018–2020</div>
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-role">Technical Specialist &amp; Analytical Chemist</div>
+        <div class="timeline-org">Meta Valent Solutions · Beamsville, ON</div>
+        <ul class="timeline-points">
+          <li>Consulted on water treatment and environmental challenges for mining and refining clients</li>
+          <li>Designed and executed laboratory experiments and industrial-scale pilot studies</li>
+          <li>Collected, managed, and reported analytical data under minimal supervision</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="timeline-item reveal">
+      <div class="timeline-date">2019–2020</div>
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-role">Events Supervisor</div>
+        <div class="timeline-org">Vineland Estates Winery · Vineland, ON</div>
+        <ul class="timeline-points">
+          <li>Primary point of contact between servers, guests, and kitchen staff during functions and weddings</li>
+          <li>Managed simultaneous logistics: staff delegation, service coordination, and timeline execution</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="timeline-item reveal">
+      <div class="timeline-date">2015–2022</div>
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-role">Event Server &amp; Bartender</div>
+        <div class="timeline-org">Ravine Vineyard Estate Winery · St. Davids, ON</div>
+        <ul class="timeline-points">
+          <li>Executed full setup and service for corporate events, celebrations, and weddings</li>
+          <li>Recognized consistently for work ethic, initiative, and teamwork</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="timeline-item reveal">
+      <div class="timeline-date">2015–2018</div>
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-role">Flex Worker / Processing Operator</div>
+        <div class="timeline-org">Post Foods Canada · Niagara Falls, ON</div>
+        <ul class="timeline-points">
+          <li>Operated pressurized and non-pressurized processing equipment in a regulated food production environment</li>
+          <li>Performed HACCP metal detector evaluations and quality control checks</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="timeline-item reveal">
+      <div class="timeline-date">2012</div>
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-role">Biologist</div>
+        <div class="timeline-org">Natural Resource Solutions Inc. · Waterloo, ON</div>
+        <ul class="timeline-points">
+          <li>Monitored bat populations around wind farm developments using night vision cameras and field surveys</li>
+          <li>Identified species and collected specimens; recognized for outstanding individual and team results</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="timeline-item reveal">
+      <div class="timeline-date">2011</div>
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-role">Research Assistant</div>
+        <div class="timeline-org">University of Guelph Research Station · Simcoe, ON</div>
+        <ul class="timeline-points">
+          <li>Collected fruit samples, recorded growth data, and evaluated quality using GC, refractometry, and colourimetry</li>
+          <li>Performed data entry and laboratory analysis in the Pomology division</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="timeline-item reveal">
+      <div class="timeline-date">2009</div>
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-role">Novice Varsity Rowing Coach</div>
+        <div class="timeline-org">University of Guelph · Guelph, ON</div>
+        <ul class="timeline-points">
+          <li>Coached novice varsity men's rowing team; awarded 2009 OUA Novice Coach of the Year</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="timeline-item reveal">
+      <div class="timeline-date">2008</div>
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-role">Evaluations Officer</div>
+        <div class="timeline-org">Health Canada, Pest Management Regulatory Agency · Ottawa, ON</div>
+        <ul class="timeline-points">
+          <li>Developed critical toxicological evaluation reports in the Fungicide/Herbicide Sector</li>
+          <li>Reviewed, summarized, and confirmed toxicological study data and research permits</li>
+          <li>Composed analyses of new formulations and their effects across multiple organism types</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-header reveal">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Contact</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="contact-grid">
+    <div>
+      <p class="contact-intro">I'm actively seeking co-op placements and entry-level opportunities in cybersecurity, particularly in <strong style="color:var(--text)">security operations, threat detection, and incident response</strong>. Feel free to reach out.</p>
+      <div class="contact-links">
+        <a class="contact-item" href="mailto:omartin2308@gmail.com">
+          <div>
+            <div class="contact-item-label">Email</div>
+            <div class="contact-item-value">omartin2308@gmail.com</div>
+          </div>
+        </a>
+        <a class="contact-item" href="tel:5198209517">
+          <div>
+            <div class="contact-item-label">Phone</div>
+            <div class="contact-item-value">(519) 820-9517</div>
+          </div>
+        </a>
+        <div class="contact-item" style="cursor:default;">
+          <div>
+            <div class="contact-item-label">Location</div>
+            <div class="contact-item-value">Peterborough, Ontario, Canada</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="contact-note reveal">
+      <strong>A note on my background:</strong><br/><br/>
+      I came to cybersecurity from over a decade of scientific and operational work: Health Canada toxicology, environmental field research, and analytical chemistry. That foundation shapes how I approach security problems: with rigour, documentation discipline, and the instinct to follow evidence where it leads.<br/><br/>
+      I'm a strong fit for teams that value investigative thinking alongside technical skill.
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>Owen Martin | Cybersecurity Portfolio</span>
+  <span>Fleming College · CSI Program · 2027</span>
+</footer>
+
+<script>
+  // Intersection observer for reveal animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
